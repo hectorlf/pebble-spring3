@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html lang="{{ locale.language }}">
+<head>
+	<title>{{ beans.foo.foo() }}</title>
+</head>
+
+<body>
+	Context path = {{ request.contextPath }}
+	Session maxInactiveInterval = {{ session.maxInactiveInterval }}
+	Label = {{ message('label.test') }}
+	Label with params = {{ message('label.test.params', 'params1', 'params2') }}
+</body>
+</html>
