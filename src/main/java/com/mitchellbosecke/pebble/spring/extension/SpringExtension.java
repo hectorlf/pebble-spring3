@@ -15,6 +15,12 @@ import org.springframework.context.MessageSource;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
 import com.mitchellbosecke.pebble.extension.Function;
 import com.mitchellbosecke.pebble.spring.extension.function.MessageSourceFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.GetAllErrorsFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.GetFieldErrorsFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.GetGlobalErrorsFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.HasErrorsFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.HasFieldErrorsFunction;
+import com.mitchellbosecke.pebble.spring.extension.function.bindingresult.HasGlobalErrorsFunction;
 
 /**
  * <p>
@@ -31,6 +37,12 @@ public class SpringExtension extends AbstractExtension {
     public Map<String, Function> getFunctions() {
         Map<String, Function> functions = new HashMap<String, Function>();
         functions.put("message", new MessageSourceFunction(this.messageSource));
+        functions.put("hasErrors", new HasErrorsFunction());
+        functions.put("hasGlobalErrors", new HasGlobalErrorsFunction());
+        functions.put("hasFieldErrors", new HasFieldErrorsFunction());
+        functions.put("getAllErrors", new GetAllErrorsFunction(this.messageSource));
+        functions.put("getGlobalErrors", new GetGlobalErrorsFunction(this.messageSource));
+        functions.put("getFieldErrors", new GetFieldErrorsFunction(this.messageSource));
         return functions;
     }
 }
