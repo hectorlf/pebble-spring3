@@ -11,12 +11,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ViewResolver;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.mitchellbosecke.pebble.loader.Loader;
-import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
 import com.mitchellbosecke.pebble.spring.bean.SomeBean;
 
@@ -48,13 +47,13 @@ public class MvcConfig {
 
     @Bean
     public Loader templateLoader() {
-        return new ServletLoader(new MockServletContext());
+        return new ClasspathLoader();
     }
 
     @Bean
     public ViewResolver viewResolver() {
         PebbleViewResolver viewResolver = new PebbleViewResolver();
-        viewResolver.setPrefix("/com/mitchellbosecke/pebble/spring/template/");
+        viewResolver.setPrefix("com/mitchellbosecke/pebble/spring/template/");
         viewResolver.setSuffix(".html");
         viewResolver.setPebbleEngine(this.pebbleEngine());
         return viewResolver;
