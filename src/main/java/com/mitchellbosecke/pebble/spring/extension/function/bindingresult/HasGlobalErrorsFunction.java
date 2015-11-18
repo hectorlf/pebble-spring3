@@ -30,6 +30,11 @@ public class HasGlobalErrorsFunction extends BaseBindingResultFunction {
 
         EvaluationContext context = (EvaluationContext) args.get("_context");
         BindingResult bindingResult = this.getBindingResult(formName, context);
-        return bindingResult.hasGlobalErrors();
+        
+        if (bindingResult != null) {
+            return bindingResult.hasGlobalErrors();
+        } else {
+            return false;
+        }
     }
 }

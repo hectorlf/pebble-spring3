@@ -30,6 +30,10 @@ public class HasErrorsFunction extends BaseBindingResultFunction {
 
         EvaluationContext context = (EvaluationContext) args.get("_context");
         BindingResult bindingResult = this.getBindingResult(formName, context);
-        return bindingResult.hasErrors();
+        if (bindingResult != null) {
+            return bindingResult.hasErrors();
+        } else {
+            return false;
+        }
     }
 }

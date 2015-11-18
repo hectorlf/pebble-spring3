@@ -28,7 +28,7 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
     private final MessageSource messageSource;
 
     public GetFieldErrorsFunction(MessageSource messageSource) {
-        super(PARAM_FORM_NAME);
+        super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
         if (messageSource == null) {
             throw new IllegalArgumentException("In order to use the GetErrorsFunction, a bean of type "
                     + MessageSource.class.getName() + " must be configured");
@@ -41,6 +41,10 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
         List<String> results = new ArrayList<>();
         String formName = (String) args.get(PARAM_FORM_NAME);
         String field = (String) args.get(PARAM_FIELD_NAME);
+        
+        if (field == null) {
+            throw new IllegalArgumentException("Field parameter is required in GetFieldErrorsFunction");
+        }
 
         EvaluationContext context = (EvaluationContext) args.get("_context");
         Locale locale = context.getLocale();

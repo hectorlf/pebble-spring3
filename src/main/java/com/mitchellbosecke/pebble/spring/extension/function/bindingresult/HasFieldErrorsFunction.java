@@ -33,11 +33,16 @@ public class HasFieldErrorsFunction extends BaseBindingResultFunction {
         EvaluationContext context = (EvaluationContext) args.get("_context");
         BindingResult bindingResult = this.getBindingResult(formName, context);
 
-        if (fieldName == null) {
-            return bindingResult.hasFieldErrors();
+        if (bindingResult != null) {
+            if (fieldName == null) {
+                return bindingResult.hasFieldErrors();
+            }
+            else {
+                return bindingResult.hasFieldErrors(fieldName);
+            }
         }
         else {
-            return bindingResult.hasFieldErrors(fieldName);
+            return false;
         }
     }
 }
