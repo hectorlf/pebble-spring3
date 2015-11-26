@@ -52,7 +52,10 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
         if (bindingResult != null) {
             for (FieldError error : bindingResult.getFieldErrors(field)) {
-                results.add(this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale));
+                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale);
+                if (msg != null) {
+                    results.add(msg);
+                }
             }
         }
         return results;
