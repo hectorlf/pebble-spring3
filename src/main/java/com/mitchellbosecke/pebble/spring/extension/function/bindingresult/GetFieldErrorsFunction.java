@@ -41,7 +41,7 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
         List<String> results = new ArrayList<>();
         String formName = (String) args.get(PARAM_FORM_NAME);
         String field = (String) args.get(PARAM_FIELD_NAME);
-        
+
         if (field == null) {
             throw new IllegalArgumentException("Field parameter is required in GetFieldErrorsFunction");
         }
@@ -52,7 +52,7 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
         if (bindingResult != null) {
             for (FieldError error : bindingResult.getFieldErrors(field)) {
-                results.add(this.messageSource.getMessage(error.getCode(), error.getArguments(), locale));
+                results.add(this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale));
             }
         }
         return results;

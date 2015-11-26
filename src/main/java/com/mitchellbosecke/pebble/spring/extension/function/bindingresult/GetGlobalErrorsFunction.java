@@ -47,7 +47,7 @@ public class GetGlobalErrorsFunction extends BaseBindingResultFunction {
 
         if (bindingResult != null) {
             for (ObjectError error : bindingResult.getGlobalErrors()) {
-                results.add(this.messageSource.getMessage(error.getCode(), error.getArguments(), locale));
+                results.add(this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale));
             }
         }
         return results;
