@@ -52,7 +52,8 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
         if (bindingResult != null) {
             for (FieldError error : bindingResult.getFieldErrors(field)) {
-                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale);
+                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
+                        error.getDefaultMessage(), locale);
                 if (msg != null) {
                     results.add(msg);
                 }

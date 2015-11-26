@@ -47,7 +47,8 @@ public class GetAllErrorsFunction extends BaseBindingResultFunction {
 
         if (bindingResult != null) {
             for (ObjectError error : bindingResult.getAllErrors()) {
-                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(), null, locale);
+                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
+                        error.getDefaultMessage(), locale);
                 if (msg != null) {
                     results.add(msg);
                 }
