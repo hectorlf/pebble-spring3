@@ -34,6 +34,7 @@ public class PebbleView extends AbstractTemplateView {
     private static final int NANOS_IN_SECOND = 1000000;
     private static final String REQUEST_VARIABLE_NAME = "request";
     private static final String SESSION_VARIABLE_NAME = "session";
+    private String characterEncoding = "UTF-8";
     // We declare a HashMap instead of Map in values to have the clone method
     private static final ConcurrentMap<ApplicationContext, HashMap<String, Object>> springBeansMap =
             new ConcurrentHashMap<ApplicationContext, HashMap<String, Object>>();
@@ -79,13 +80,17 @@ public class PebbleView extends AbstractTemplateView {
     public void setTemplateName(String name) {
         this.templateName = name;
     }
+    
+    public void setCharacterEncoding(String characterEncoding) {
+        this.characterEncoding = characterEncoding;
+    }
 
     @Override
     protected void renderMergedTemplateModel(Map<String, Object> model, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
         response.setContentType(this.getContentType());
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(this.characterEncoding);
 
         long startNanos = System.nanoTime();
 
