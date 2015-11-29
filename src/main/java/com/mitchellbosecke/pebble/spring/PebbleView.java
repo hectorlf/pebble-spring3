@@ -30,7 +30,6 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 public class PebbleView extends AbstractTemplateView {
     private static final String BEANS_VARIABLE_NAME = "beans";
-    private static final String LOCALE_VARIABLE_NAME = "locale";
     private static final int NANOS_IN_SECOND = 1000000;
     private static final String REQUEST_VARIABLE_NAME = "request";
     private static final String SESSION_VARIABLE_NAME = "session";
@@ -105,10 +104,9 @@ public class PebbleView extends AbstractTemplateView {
         // Add session
         model.put(SESSION_VARIABLE_NAME, request.getSession(false));
 
-        // Add locale
+        // Locale
         Locale locale = RequestContextUtils.getLocale(request);
-        model.put(LOCALE_VARIABLE_NAME, locale);
-
+        
         final Writer writer = response.getWriter();
         try {
             template.evaluate(writer, model, locale);
