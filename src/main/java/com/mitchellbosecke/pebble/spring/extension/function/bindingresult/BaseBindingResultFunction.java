@@ -37,6 +37,6 @@ public abstract class BaseBindingResultFunction implements Function {
 
     protected BindingResult getBindingResult(String formName, EvaluationContext context) {
         String attribute = BindingResult.class.getName() + "." + formName;
-        return (BindingResult) context.get(attribute);
+        return (BindingResult) context.getScopeChain().get(attribute);
     }
 }

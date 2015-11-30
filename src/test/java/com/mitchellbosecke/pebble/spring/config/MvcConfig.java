@@ -18,6 +18,7 @@ import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
 import com.mitchellbosecke.pebble.spring.bean.SomeBean;
+import com.mitchellbosecke.pebble.spring.extension.SpringExtension;
 
 /**
  * Spring configuration for unit test
@@ -42,11 +43,20 @@ public class MvcConfig {
 
     @Bean
     public PebbleEngine pebbleEngine() {
-        return new PebbleEngine(this.templateLoader());
+        return new PebbleEngine.Builder()
+                .loader(this.templateLoader())
+                .strictVariables(false)
+                .extension(springExtension())
+                .build();
+    }
+    
+    @Bean
+    public SpringExtension springExtension() {
+        return new SpringExtension();
     }
 
     @Bean
-    public Loader templateLoader() {
+    public Loader<?> templateLoader() {
         return new ClasspathLoader();
     }
 

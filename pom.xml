@@ -19,7 +19,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<pebble.version>1.6.0</pebble.version>
+		<pebble.version>1.6.1-SNAPSHOT</pebble.version>
 		<spring.version>3.2.13.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>

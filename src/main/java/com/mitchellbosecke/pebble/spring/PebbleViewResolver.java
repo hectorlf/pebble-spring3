@@ -14,13 +14,12 @@ import org.springframework.web.servlet.view.AbstractUrlBasedView;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.loader.Loader;
-import com.mitchellbosecke.pebble.spring.extension.SpringExtension;
 
 public class PebbleViewResolver extends AbstractTemplateViewResolver implements ViewResolver, InitializingBean {
 
     private PebbleEngine pebbleEngine;
 
-    private Loader templateLoader;
+    private Loader<?> templateLoader;
 
     public PebbleViewResolver() {
         this.setViewClass(this.requiredViewClass());
@@ -31,10 +30,6 @@ public class PebbleViewResolver extends AbstractTemplateViewResolver implements 
         this.templateLoader = this.pebbleEngine.getLoader();
         this.templateLoader.setPrefix(this.getPrefix());
         this.templateLoader.setSuffix(this.getSuffix());
-
-        SpringExtension springExtension = new SpringExtension();
-        this.getApplicationContext().getAutowireCapableBeanFactory().autowireBean(springExtension);
-        this.pebbleEngine.addExtension(springExtension);
     }
 
     @Required
