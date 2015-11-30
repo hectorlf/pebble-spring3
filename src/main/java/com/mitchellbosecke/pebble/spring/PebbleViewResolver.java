@@ -17,8 +17,8 @@ import com.mitchellbosecke.pebble.loader.Loader;
 
 public class PebbleViewResolver extends AbstractTemplateViewResolver implements ViewResolver, InitializingBean {
 
+    private String characterEncoding = "UTF-8";
     private PebbleEngine pebbleEngine;
-
     private Loader<?> templateLoader;
 
     public PebbleViewResolver() {
@@ -32,6 +32,10 @@ public class PebbleViewResolver extends AbstractTemplateViewResolver implements 
         this.templateLoader.setSuffix(this.getSuffix());
     }
 
+    public void setCharacterEncoding(String characterEncoding) {
+        this.characterEncoding = characterEncoding;
+    }
+
     @Required
     public void setPebbleEngine(PebbleEngine pebbleEngine) {
         this.pebbleEngine = pebbleEngine;
@@ -42,6 +46,7 @@ public class PebbleViewResolver extends AbstractTemplateViewResolver implements 
         PebbleView view = (PebbleView) super.buildView(viewName);
         view.setTemplateName(viewName);
         view.setPebbleEngine(this.pebbleEngine);
+        view.setCharacterEncoding(this.characterEncoding);
 
         return view;
     }
