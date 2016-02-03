@@ -31,6 +31,7 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 public class PebbleView extends AbstractTemplateView {
 
     public static final String REQUEST_VARIABLE_NAME = "request";
+    public static final String RESPONSE_VARIABLE_NAME = "response";
     public static final String SESSION_VARIABLE_NAME = "session";
 
     private static final String BEANS_VARIABLE_NAME = "beans";
@@ -100,8 +101,9 @@ public class PebbleView extends AbstractTemplateView {
         // Add beans context
         model = addSpringBeansVariable(model, this.getApplicationContext());
 
-        // Add request
+        // Add request & response
         model.put(REQUEST_VARIABLE_NAME, request);
+        model.put(RESPONSE_VARIABLE_NAME, response);
 
         // Add session
         model.put(SESSION_VARIABLE_NAME, request.getSession(false));
