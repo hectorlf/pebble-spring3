@@ -29,10 +29,12 @@ import com.mitchellbosecke.pebble.spring.context.Beans;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 public class PebbleView extends AbstractTemplateView {
+
+    public static final String REQUEST_VARIABLE_NAME = "request";
+    public static final String SESSION_VARIABLE_NAME = "session";
+
     private static final String BEANS_VARIABLE_NAME = "beans";
     private static final int NANOS_IN_SECOND = 1000000;
-    private static final String REQUEST_VARIABLE_NAME = "request";
-    private static final String SESSION_VARIABLE_NAME = "session";
     private String characterEncoding = "UTF-8";
     // We declare a HashMap instead of Map in values to have the clone method
     private static final ConcurrentMap<ApplicationContext, HashMap<String, Object>> springBeansMap =
