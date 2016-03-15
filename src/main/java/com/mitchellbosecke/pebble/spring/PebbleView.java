@@ -9,18 +9,14 @@ package com.mitchellbosecke.pebble.spring;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.AbstractTemplateView;
 
@@ -33,10 +29,6 @@ public class PebbleView extends AbstractTemplateView {
     private static final int NANOS_IN_SECOND = 1000000;
     private static final String REQUEST_VARIABLE_NAME = "request";
     private static final String SESSION_VARIABLE_NAME = "session";
-    private String characterEncoding = "UTF-8";
-    // We declare a HashMap instead of Map in values to have the clone method
-    private static final ConcurrentMap<ApplicationContext, HashMap<String, Object>> springBeansMap =
-            new ConcurrentHashMap<ApplicationContext, HashMap<String, Object>>();
     /**
      * <p>
      * TIMER logger. This logger will output the time required for executing each template processing operation.
@@ -47,29 +39,13 @@ public class PebbleView extends AbstractTemplateView {
      * </p>
      */
     private static final Logger TIMER_LOGGER = LoggerFactory.getLogger(PebbleView.class.getName() + ".timer");
+
+    private String characterEncoding = "UTF-8";
     private PebbleEngine engine;
     private String templateName;
 
-    @SuppressWarnings("unchecked")
-    private static Map<String, Object> addSpringBeansVariable(Map<String, ?> model, ApplicationContext appctx) {
-        HashMap<String, Object> variableMap = springBeansMap.get(appctx);
-        if (variableMap == null) {
-            variableMap = new HashMap<>();
-            // We will use a singleton-per-appctx Beans instance
-            variableMap.put(BEANS_VARIABLE_NAME, new Beans(appctx));
-            springBeansMap.put(appctx, variableMap);
-        }
-
-        Map<String, Object> newVariables;
-        synchronized (variableMap) {
-            newVariables = (Map<String, Object>) variableMap.clone();
-        }
-
-        if (model != null) {
-            newVariables.putAll(model);
-        }
-
-        return newVariables;
+    public void setCharacterEncoding(String characterEncoding) {
+        this.characterEncoding = characterEncoding;
     }
 
     public void setPebbleEngine(PebbleEngine engine) {
@@ -78,10 +54,6 @@ public class PebbleView extends AbstractTemplateView {
 
     public void setTemplateName(String name) {
         this.templateName = name;
-    }
-    
-    public void setCharacterEncoding(String characterEncoding) {
-        this.characterEncoding = characterEncoding;
     }
 
     @Override
@@ -96,7 +68,7 @@ public class PebbleView extends AbstractTemplateView {
         PebbleTemplate template = this.engine.getTemplate(this.templateName);
 
         // Add beans context
-        model = addSpringBeansVariable(model, this.getApplicationContext());
+        model.put(BEANS_VARIABLE_NAME, new Beans(this.getApplicationContext()));
 
         // Add request
         model.put(REQUEST_VARIABLE_NAME, request);
@@ -106,7 +78,7 @@ public class PebbleView extends AbstractTemplateView {
 
         // Locale
         Locale locale = RequestContextUtils.getLocale(request);
-        
+
         final Writer writer = response.getWriter();
         try {
             template.evaluate(writer, model, locale);
