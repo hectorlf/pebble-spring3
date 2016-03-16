@@ -26,7 +26,7 @@ import com.mitchellbosecke.pebble.spring.extension.SpringExtension;
  * @author Eric Bussieres
  */
 @Configuration
-public class MvcConfig {
+public class MVCConfig {
     @Bean
     @Qualifier("foo")
     public SomeBean foo() {
@@ -36,7 +36,7 @@ public class MvcConfig {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("com.mitchellbosecke.pebble.spring.template.messages");
+        messageSource.setBasename("com.mitchellbosecke.pebble.spring.messages");
 
         return messageSource;
     }
@@ -46,10 +46,10 @@ public class MvcConfig {
         return new PebbleEngine.Builder()
                 .loader(this.templateLoader())
                 .strictVariables(false)
-                .extension(springExtension())
+                .extension(this.springExtension())
                 .build();
     }
-    
+
     @Bean
     public SpringExtension springExtension() {
         return new SpringExtension();

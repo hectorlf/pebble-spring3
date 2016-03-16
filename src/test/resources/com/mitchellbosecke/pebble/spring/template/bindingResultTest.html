@@ -2,15 +2,10 @@
 
 <html>
 <head>
-	<title>{{ beans.foo.foo() }}</title>
+	<title>test</title>
 </head>
 
-<body>
-	Context path = {{ request.contextPath }}
-	Session maxInactiveInterval = {{ session.maxInactiveInterval }}
-	Label = {{ message('label.test') }}
-	Label with params = {{ message('label.test.params', 'params1', 'params2') }}
-	
+<body>	
 	{{ hasErrors('formName') }}
 	{{ hasGlobalErrors('formName') }}
 	{{ hasFieldErrors('formName', 'testField') }}

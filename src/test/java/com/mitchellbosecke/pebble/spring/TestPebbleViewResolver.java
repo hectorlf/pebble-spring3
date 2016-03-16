@@ -32,7 +32,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ViewResolver;
 
-import com.mitchellbosecke.pebble.spring.config.MvcConfig;
+import com.mitchellbosecke.pebble.spring.config.MVCConfig;
 
 /**
  * Unit test for the PebbleViewResolver
@@ -41,16 +41,51 @@ import com.mitchellbosecke.pebble.spring.config.MvcConfig;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { MvcConfig.class })
+@ContextConfiguration(classes = { MVCConfig.class })
 public class TestPebbleViewResolver {
     private static final Locale DEFAULT_LOCALE = Locale.CANADA;
+    private static final String FORM_NAME = "formName";
+    private static final String EXPECTED_RESPONSE_PATH = "/com/mitchellbosecke/pebble/spring/expectedResponse";
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private BindingResult bindingResult;
-    private static final String FORM_NAME = "formName";
 
     @Autowired
     private ViewResolver viewResolver;
+
+    @Test
+    public void beansTestOK() throws Exception {
+        String result = this.render("beansTest", new HashMap<String, Object>());
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/beansTest.html");
+    }
+
+    @Test
+    public void bindingResultTestOK() throws Exception {
+        Map<String, Object> model = new HashMap<>();
+
+        model.put(BindingResult.class.getName() + "." + FORM_NAME, this.bindingResult);
+
+        String result = this.render("bindingResultTest", model);
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/bindingResultTest.html");
+    }
+
+    @Test
+    public void messageTestOK() throws Exception {
+        String result = this.render("messageTest", new HashMap<String, Object>());
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/messageTest.html");
+    }
+
+    @Test
+    public void requestTestOK() throws Exception {
+        String result = this.render("requestTest", new HashMap<String, Object>());
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/requestTest.html");
+    }
+
+    @Test
+    public void sessionTestOK() throws Exception {
+        String result = this.render("sessionTest", new HashMap<String, Object>());
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/sessionTest.html");
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -60,36 +95,27 @@ public class TestPebbleViewResolver {
         this.request.getSession().setMaxInactiveInterval(600);
 
         this.response = new MockHttpServletResponse();
-        
-        bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.when(bindingResult.hasErrors()).thenReturn(true);
-        Mockito.when(bindingResult.hasGlobalErrors()).thenReturn(true);
-        Mockito.when(bindingResult.hasFieldErrors("testField")).thenReturn(true);
-        
+
+        //Binding result setup
+        this.bindingResult = Mockito.mock(BindingResult.class);
+        Mockito.when(this.bindingResult.hasErrors()).thenReturn(true);
+        Mockito.when(this.bindingResult.hasGlobalErrors()).thenReturn(true);
+        Mockito.when(this.bindingResult.hasFieldErrors("testField")).thenReturn(true);
+
         List<ObjectError> allErrors = new ArrayList<>();
         allErrors.add(new ObjectError(FORM_NAME, new String[] {"error.test"}, new String[] {}, "???error.test???"));
-        
-        List<ObjectError> globalErrors = new ArrayList<>();
-        globalErrors.add(new ObjectError(FORM_NAME, new String[] {"error.global.test.params"}, 
-                new String[] {"param1", "param2"}, "???error.global.test.params???"));
-        
-        List<FieldError> fieldErrors = new ArrayList<>();
-        fieldErrors.add(new FieldError(FORM_NAME, "testField", null, false, new String[] {"error.field.test.params"}, 
-                new String[] {"param1", "param2"}, "???error.field.test.params???"));
-        
-        Mockito.when(bindingResult.getAllErrors()).thenReturn(allErrors);
-        Mockito.when(bindingResult.getGlobalErrors()).thenReturn(globalErrors);
-        Mockito.when(bindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
-    }
 
-    @Test
-    public void viewResolverTestOK() throws Exception {
-        Map<String, Object> model = new HashMap<>();
-        
-        model.put(BindingResult.class.getName() + "." + FORM_NAME, bindingResult);
-        
-        String result = this.render("template", model);
-        this.assertOutput(result, "/com/mitchellbosecke/pebble/spring/template/expectedTemplate.html");
+        List<ObjectError> globalErrors = new ArrayList<>();
+        globalErrors.add(new ObjectError(FORM_NAME, new String[] {"error.global.test.params"},
+                new String[] {"param1", "param2"}, "???error.global.test.params???"));
+
+        List<FieldError> fieldErrors = new ArrayList<>();
+        fieldErrors.add(new FieldError(FORM_NAME, "testField", null, false, new String[] {"error.field.test.params"},
+                new String[] {"param1", "param2"}, "???error.field.test.params???"));
+
+        Mockito.when(this.bindingResult.getAllErrors()).thenReturn(allErrors);
+        Mockito.when(this.bindingResult.getGlobalErrors()).thenReturn(globalErrors);
+        Mockito.when(this.bindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
     }
 
     private void assertOutput(String output, String expectedOutput) throws IOException {
