@@ -25,10 +25,13 @@ import com.mitchellbosecke.pebble.spring.context.Beans;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 public class PebbleView extends AbstractTemplateView {
-    private static final String BEANS_VARIABLE_NAME = "beans";
+
+    public static final String REQUEST_VARIABLE_NAME = "request";
+    public static final String RESPONSE_VARIABLE_NAME = "response";
+    public static final String SESSION_VARIABLE_NAME = "session";
+
+	private static final String BEANS_VARIABLE_NAME = "beans";
     private static final int NANOS_IN_SECOND = 1000000;
-    private static final String REQUEST_VARIABLE_NAME = "request";
-    private static final String SESSION_VARIABLE_NAME = "session";
     /**
      * <p>
      * TIMER logger. This logger will output the time required for executing each template processing operation.
@@ -70,8 +73,9 @@ public class PebbleView extends AbstractTemplateView {
         // Add beans context
         model.put(BEANS_VARIABLE_NAME, new Beans(this.getApplicationContext()));
 
-        // Add request
+        // Add request & response
         model.put(REQUEST_VARIABLE_NAME, request);
+        model.put(RESPONSE_VARIABLE_NAME, response);
 
         // Add session
         model.put(SESSION_VARIABLE_NAME, request.getSession(false));
